@@ -8,7 +8,7 @@ version = "1.0.0"
 description = "Turn a New Recruit army list into a group photo of your miniatures."
 readme = "README.md"
 license = { text = "MIT" }
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = ["Pillow>=10.0"]
 keywords = ["wargaming", "miniatures", "new recruit", "army list", "tabletop"]
 

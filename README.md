@@ -25,7 +25,7 @@ every model in the list, lined up together like a team photo.
 
 ## Quick start
 
-1. Install [Python 3.9+](https://www.python.org/downloads/). On Windows, tick **"Add python.exe to PATH"**.
+1. Install [Python 3.10+](https://www.python.org/downloads/). On Windows, tick **"Add python.exe to PATH"**.
 2. Download this repository and install the one dependency:
    ```
    pip install -r requirements.txt
