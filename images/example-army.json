@@ -1,7 +1,13 @@
 {
   "images": {
     "Big Monster": "big.png",
-    "Little Monsters": ["little-1.png", "little-2.png"]
+    "Little Monsters": [
+      "little-1.png",
+      "little-2.png"
+    ]
+  },
+  "models": {
+    "Little Monsters": 20
   },
   "scale": {
     "Flying Monster": 1.1
@@ -13,9 +19,14 @@
     "max_model_height": 1400,
     "background": "#ffffff",
     "overlap": 110,
-    "shadow_opacity": 55,
+    "shadow_opacity": 0,
     "disposition_size": 0.16,
     "disposition_position": "top-left",
-    "placeholders": false
+    "placeholders": false,
+    "layout": "group-photo",
+    "perspective": 0.18,
+    "tilt": 0.65,
+    "curve": 0.15,
+    "max_hidden": 0.01
   }
 }
