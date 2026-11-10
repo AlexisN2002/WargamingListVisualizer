@@ -7,6 +7,10 @@ every model in the list, lined up together like a team photo.
 
 *Demo made with the procedurally drawn critters in `examples/demo_images`.*
 
+> **Good to know**
+> - **List format:** currently only the **New Recruit text export in GW format** is supported (see [Supported list format](#supported-list-format)).
+> - **Images:** works best with the model images from [minicompare.info](https://minicompare.info/), because they share one scale (see [Images](#images)).
+
 ## Features
 
 - **Every model is in the picture.** A unit of 20 shows 20 models in staggered ranks.
@@ -31,7 +35,7 @@ every model in the list, lined up together like a team photo.
    pip install -r requirements.txt
    ```
 3. Put your model images into `images/<your faction>/` (see [Images](#images)).
-4. In New Recruit, export or copy your list **as text**.
+4. In New Recruit, export or copy your list **as text in the GW format**.
 5. Run it:
    - **Windows:** double-click `army-photo.bat`
    - **Any OS:** `python army_photo.py` (clipboard) or `python army_photo.py my_list.txt`
@@ -43,6 +47,30 @@ To try it without your own images:
 ```
 python army_photo.py examples/demo_list.txt -i examples/demo_images
 ```
+
+## Supported list format
+
+Right now army-photo only reads the **text export of [New Recruit](https://www.newrecruit.eu/) in the
+GW format**. It looks like this:
+
+```
+My List (1,000 Points)
+
+Monster Army
+Endless Tide (3 Detachment Points)
+Priority Assets
+Incursion (1,000 Points)
+
+CHARACTERS
+
+Boss Monster (75 Points)
+  • 1x Big club
+...
+Exported with New Recruit v37.21, Data Version: v3
+```
+
+Other New Recruit export styles, BattleScribe or the official app are not supported yet.
+Pull requests are welcome.
 
 ## Images
 
@@ -64,6 +92,9 @@ ignored:
 - **Formats:** `.png`, `.webp` and `.jpg` work. Use images with a **transparent background**.
 - **Scale:** all images of an army should share **one scale**. If an infantry model is 200 px
   tall, a model twice its size should be 400 px.
+- **Recommended source:** the cut-out model images on [minicompare.info](https://minicompare.info/)
+  are all drawn to the same scale, so the tool works best with them. Please respect the rights
+  of the image owners and keep such images out of the repository.
 
 When a unit has no image, it is left out and listed in the console. Use `--placeholders` to
 show a "?" for it instead.
