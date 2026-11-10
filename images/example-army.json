@@ -1,0 +1,21 @@
+{
+  "images": {
+    "Norn Emissary": "norn.webp",
+    "Termagants": ["termagant-a.png", "termagant-b.png"]
+  },
+  "scale": {
+    "Neurolictor": 1.1
+  },
+  "leaders": {
+    "Tyranid Prime": "Hormagaunts"
+  },
+  "settings": {
+    "max_model_height": 1400,
+    "background": "#ffffff",
+    "overlap": 110,
+    "shadow_opacity": 55,
+    "disposition_size": 0.16,
+    "disposition_position": "top-left",
+    "placeholders": false
+  }
+}

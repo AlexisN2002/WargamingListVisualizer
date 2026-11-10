@@ -1,0 +1,16 @@
+# Your own model images stay on your computer (see README: "Images and copyright")
+images/*
+!images/README.md
+!images/example-army.json
+
+# Generated pictures
+army_photo_*.png
+group_photo_*.png
+
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.venv/

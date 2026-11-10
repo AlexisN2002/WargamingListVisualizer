@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "army-photo"
+version = "1.0.0"
+description = "Turn a New Recruit army list into a group photo of your miniatures."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+dependencies = ["Pillow>=10.0"]
+keywords = ["wargaming", "miniatures", "new recruit", "army list", "tabletop"]
+
+[project.scripts]
+army-photo = "army_photo:main"
+
+[tool.setuptools]
+py-modules = ["army_photo"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

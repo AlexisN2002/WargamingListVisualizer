@@ -1,0 +1,44 @@
+Demo Swarm (1,000 Points)
+
+Bug Swarm
+Endless Tide (3 Detachment Points)
+Take and Hold
+Incursion (1,000 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+Brood Warden (80 Points)
+  • Attached as: Leader (Character)
+  • 1x Bone scythes
+
+Skitterlings (90 Points)
+  • Attached as: Bodyguard (Battleline)
+  • 20x Skitterlings
+     ◦ 20x Claws
+
+CHARACTERS
+
+Mind Leech (130 Points)
+  • Warlord
+  • 1x Psychic lash
+
+BATTLELINE
+
+Spitters (60 Points)
+  • 10x Spitters
+     ◦ 10x Acid glands
+
+OTHER DATASHEETS
+
+Spine Beast (150 Points)
+  • 1x Spine volley
+
+Sky Stalker (110 Points)
+  • 1x Diving talons
+
+Hive Colossus (380 Points)
+  • 1x Crushing claws
+
+Exported with New Recruit v37.21, Data Version: v3
