@@ -85,14 +85,14 @@ def critter(height, width_ratio=1.0, legs=6, spikes=5, palette="violet", seed=0,
 def main():
     OUT.mkdir(exist_ok=True)
     specs = {
-        "skitterling-a": dict(height=90, legs=6, spikes=3, palette="violet", seed=1),
-        "skitterling-b": dict(height=88, legs=6, spikes=4, palette="violet", seed=2),
-        "spitter": dict(height=100, legs=4, spikes=4, palette="teal", seed=3),
-        "brood-warden": dict(height=210, legs=4, spikes=6, palette="rust", seed=4, tall=True),
-        "spine-beast": dict(height=330, legs=6, spikes=7, palette="violet", seed=5),
-        "sky-stalker": dict(height=260, legs=2, spikes=5, palette="teal", seed=6, wings=True, tall=True),
-        "hive-colossus": dict(height=520, legs=6, spikes=9, palette="rust", seed=7, width_ratio=1.1),
-        "mind-leech": dict(height=300, legs=4, spikes=6, palette="teal", seed=8, tall=True),
+        "little-monster-a": dict(height=90, legs=6, spikes=3, palette="violet", seed=1),
+        "little-monster-b": dict(height=88, legs=6, spikes=4, palette="violet", seed=2),
+        "spitting-monster": dict(height=100, legs=4, spikes=4, palette="teal", seed=3),
+        "boss-monster": dict(height=210, legs=4, spikes=6, palette="rust", seed=4, tall=True),
+        "spiky-monster": dict(height=330, legs=6, spikes=7, palette="violet", seed=5),
+        "flying-monster": dict(height=260, legs=2, spikes=5, palette="teal", seed=6, wings=True, tall=True),
+        "big-monster": dict(height=520, legs=6, spikes=9, palette="rust", seed=7, width_ratio=1.1),
+        "smart-monster": dict(height=300, legs=4, spikes=6, palette="teal", seed=8, tall=True),
     }
     for name, spec in specs.items():
         critter(**spec).save(OUT / f"{name}.png")

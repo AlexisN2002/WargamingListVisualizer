@@ -47,17 +47,17 @@ python army_photo.py examples/demo_list.txt -i examples/demo_images
 ## Images
 
 Create one folder per army inside `images/`, named like the faction line of the export,
-for example `images/tyranids/` for a list that says `Tyranids`.
+for example `images/monster-army/` for a list that says `Monster Army`.
 
 **File names are matched to unit names.** Case, spaces, plurals and "with …" suffixes are
 ignored:
 
 | Unit in the list               | Matching file names                                  |
 |--------------------------------|------------------------------------------------------|
-| `Termagants`                   | `termagant.png`, `termagants.webp`                   |
-| `Tyranid Prime with Lash Whip` | `tyranid-prime.png`, `tyranid-prime-with-lash-whip.png` |
-| `The Swarmlord`                | `swarmlord.png`                                      |
-| `Hive Guard`                   | `hive-guard-a.png` + `hive-guard-b.png` (variants)   |
+| `Little Monsters`              | `little-monster.png`, `little-monsters.webp`         |
+| `Boss Monster with Big Club`   | `boss-monster.png`, `boss-monster-with-big-club.png` |
+| `The Big Monster`              | `big-monster.png`                                    |
+| `Spiky Monsters`               | `spiky-monster-a.png` + `spiky-monster-b.png` (variants) |
 
 - **Variants:** suffixes like `-a`, `-b` or `-2` are mixed within a unit, so a mob of 20
   doesn't look copy-pasted. Years (`-2023`) are ignored.
@@ -80,9 +80,9 @@ Optional. Place it in the army's image folder (copy `images/example-army.json`):
 
 ```json
 {
-  "images":  { "Norn Emissary": "norn.webp", "Termagants": ["gant-1.png", "gant-2.png"] },
-  "scale":   { "Neurolictor": 1.1 },
-  "leaders": { "Tyranid Prime": "Hormagaunts" },
+  "images":  { "Big Monster": "big.png", "Little Monsters": ["little-1.png", "little-2.png"] },
+  "scale":   { "Flying Monster": 1.1 },
+  "leaders": { "Boss Monster": "Little Monsters" },
   "settings": {
     "max_model_height": 1400,
     "background": "#ffffff",
@@ -108,7 +108,7 @@ The tool decides who leads whom in this order:
 
 1. **New Recruit export:** if you attach a leader in New Recruit, the export contains an
    `ATTACHED UNITS` section, and that is used as-is.
-2. **Presets:** `--leader "Tyranid Prime=Hormagaunts"` on the command line, or the
+2. **Presets:** `--leader "Boss Monster=Little Monsters"` on the command line, or the
    `leaders` key in `army.json`.
 3. **Asking you:** otherwise the tool asks for each character. Turn this off with `--no-questions`.
 
@@ -125,7 +125,7 @@ The tool looks for the icon in two places:
 
 To cut a card into single files once:
 ```
-python army_photo.py --extract-dispositions path/to/card.jpg -i images/tyranids
+python army_photo.py --extract-dispositions path/to/card.jpg -i images/monster-army
 ```
 
 ## Command line

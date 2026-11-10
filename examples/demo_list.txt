@@ -1,6 +1,6 @@
 Demo Swarm (1,000 Points)
 
-Bug Swarm
+Monster Army
 Endless Tide (3 Detachment Points)
 Take and Hold
 Incursion (1,000 Points)
@@ -9,36 +9,36 @@ ATTACHED UNITS
 
 Attached unit 1
 
-Brood Warden (80 Points)
+Boss Monster (80 Points)
   • Attached as: Leader (Character)
-  • 1x Bone scythes
+  • 1x Big club
 
-Skitterlings (90 Points)
+Little Monsters (90 Points)
   • Attached as: Bodyguard (Battleline)
-  • 20x Skitterlings
+  • 20x Little Monsters
      ◦ 20x Claws
 
 CHARACTERS
 
-Mind Leech (130 Points)
+Smart Monster (130 Points)
   • Warlord
   • 1x Psychic lash
 
 BATTLELINE
 
-Spitters (60 Points)
-  • 10x Spitters
+Spitting Monsters (60 Points)
+  • 10x Spitting Monsters
      ◦ 10x Acid glands
 
 OTHER DATASHEETS
 
-Spine Beast (150 Points)
-  • 1x Spine volley
+Spiky Monster (150 Points)
+  • 1x Spike volley
 
-Sky Stalker (110 Points)
+Flying Monster (110 Points)
   • 1x Diving talons
 
-Hive Colossus (380 Points)
+Big Monster (380 Points)
   • 1x Crushing claws
 
 Exported with New Recruit v37.21, Data Version: v3

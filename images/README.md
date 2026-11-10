@@ -5,14 +5,14 @@ export (case and spaces don't matter):
 
 ```
 images/
-├── tyranids/
+├── monster-army/
 │   ├── army.json              (optional, copy example-army.json)
 │   ├── dispositions.jpg       (optional disposition card) or dispositions/*.png
-│   ├── hormagaunt-a.webp
-│   ├── hormagaunt-b.webp
-│   ├── tyranid-prime.webp
-│   └── norn-emissary.webp
-└── space-marines/
+│   ├── little-monster-a.webp
+│   ├── little-monster-b.webp
+│   ├── boss-monster.webp
+│   └── big-monster.webp
+└── another-army/
     └── ...
 ```
 

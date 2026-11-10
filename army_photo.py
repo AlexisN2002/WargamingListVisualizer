@@ -168,7 +168,7 @@ def slug(text: str) -> str:
 
 
 def base_key(filename: str) -> str:
-    """'hormagaunt-2023-a.webp' -> 'hormagaunt' (drops years and variant suffixes)."""
+    """'little-monster-2023-a.webp' -> 'little-monster' (drops years and variant suffixes)."""
     stem = Path(filename).stem.lower()
     stem = re.sub(r"[-_ ](19|20)\d\d(?=$|[-_ ])", "", stem)
     while True:
@@ -210,7 +210,7 @@ class ImageLibrary:
         for k in cands:
             if k in self.index:
                 return self.index[k]
-        for k in cands:  # e.g. "neurogaunt" -> neurogaunt-a-node-beast.webp
+        for k in cands:  # e.g. "bigmonster" -> big-monster-green.webp
             hits = sorted((s for s in self.index if s.startswith(k)), key=len)
             if hits:
                 return self.index[hits[0]]
@@ -622,7 +622,7 @@ def main(argv=None) -> int:
     ap.add_argument("-o", "--output", help="output file (default: army_photo_<list name>.png)")
     ap.add_argument("-i", "--images", help="folder with model images (default: images/<faction>)")
     ap.add_argument("-l", "--leader", action="append", default=[], metavar="CHARACTER=UNIT",
-                    help='attach a leader, e.g. "Tyranid Prime=Hormagaunts" (repeatable)')
+                    help='attach a leader, e.g. "Boss Monster=Little Monsters" (repeatable)')
     ap.add_argument("--no-questions", action="store_true", help="never ask which unit a character leads")
     ap.add_argument("--background", help='"#ffffff", "#000000", "transparent", ...')
     ap.add_argument("--transparent", action="store_true", help="shortcut for --background transparent")

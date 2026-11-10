@@ -6,10 +6,10 @@ import army_photo as ap
 
 ROOT = Path(__file__).resolve().parent.parent
 
-ATTACHED_LIST = """Assim2k (2,000 Points)
+ATTACHED_LIST = """Swarm2k (2,000 Points)
 
-Tyranids
-Ambush Predators and Assimilation Swarm (3 Detachment Points)
+Monster Army
+Endless Tide (3 Detachment Points)
 Priority Assets
 Strike Force (2,000 Points)
 
@@ -17,31 +17,31 @@ ATTACHED UNITS
 
 Attached unit 1
 
-Tyranid Prime with Lash Whip (100 Points)
+Boss Monster with Big Club (100 Points)
   • Attached as: Leader (Character)
-  • 1x Lash whip
-  • Enhancements: Parasitic Biomorphology
+  • 1x Big club
+  • Enhancements: Chitin Crown
 
-Hormagaunts (70 Points)
+Little Monsters (70 Points)
   • Attached as: Bodyguard (Battleline)
-  • 10x Hormagaunts
-     ◦ 10x Hormagaunt talons
+  • 10x Little Monsters
+     ◦ 10x Claws
 
 CHARACTERS
 
-The Swarmlord (210 Points)
+The Big Monster (210 Points)
   • Warlord
-  • 1x Bone Sabres
+  • 1x Crushing claws
 
 OTHER DATASHEETS
 
-Pyrovores (100 Points)
-  • 3x Pyrovore
-     ◦ 3x Chitin-barbed limbs
-     ◦ 3x Flamespurt
+Spitting Monsters (100 Points)
+  • 3x Spitting Monster
+     ◦ 3x Spindly legs
+     ◦ 3x Acid glands
 
-Lictor (60 Points)
-  • 1x Lictor claws and talons
+Flying Monster (60 Points)
+  • 1x Diving talons
 
 Exported with New Recruit v37.21, Data Version: v3
 """
@@ -49,22 +49,22 @@ Exported with New Recruit v37.21, Data Version: v3
 
 def test_header():
     army = ap.parse_list(ATTACHED_LIST)
-    assert army.title == "Assim2k"
+    assert army.title == "Swarm2k"
     assert army.points == "2,000"
-    assert army.faction == "Tyranids"
-    assert army.detachment == "Ambush Predators and Assimilation Swarm"
+    assert army.faction == "Monster Army"
+    assert army.detachment == "Endless Tide"
     assert army.disposition == "Priority Assets"
 
 
 def test_units_and_model_counts():
     army = ap.parse_list(ATTACHED_LIST)
     counts = {u.name: u.models for u in army.units}
-    assert counts == {"Tyranid Prime with Lash Whip": 1, "Hormagaunts": 10, "The Swarmlord": 1,
-                      "Pyrovores": 3, "Lictor": 1}
-    swarmlord = next(u for u in army.units if u.name == "The Swarmlord")
-    assert swarmlord.warlord and swarmlord.character
-    prime = army.units[0]
-    assert prime.enhancement == "Parasitic Biomorphology"
+    assert counts == {"Boss Monster with Big Club": 1, "Little Monsters": 10, "The Big Monster": 1,
+                      "Spitting Monsters": 3, "Flying Monster": 1}
+    big = next(u for u in army.units if u.name == "The Big Monster")
+    assert big.warlord and big.character
+    boss = army.units[0]
+    assert boss.enhancement == "Chitin Crown"
 
 
 def test_attached_units_are_resolved_without_questions():
@@ -80,16 +80,16 @@ def test_leader_presets():
     for u in army.units:
         u.attached_role, u.attached_group = "", None
     army.units[0].character = True
-    leaders = ap.resolve_leaders(army, {"Brood Warden": "Skitterlings"}, ask=False)
+    leaders = ap.resolve_leaders(army, {"Boss Monster": "Little Monsters"}, ask=False)
     assert leaders == {0: 1}
 
 
 def test_base_key_and_candidates():
-    assert ap.base_key("hormagaunt-2023-a.webp") == "hormagaunt"
-    assert ap.base_key("hive-guard-b.webp") == "hiveguard"
-    assert "tyranidprime" in ap.name_candidates("Tyranid Prime with Lash Whip")
-    assert "swarmlord" in ap.name_candidates("The Swarmlord")
-    assert "termagant" in ap.name_candidates("Termagants")
+    assert ap.base_key("little-monster-2023-a.webp") == "littlemonster"
+    assert ap.base_key("spiky-monster-b.webp") == "spikymonster"
+    assert "bossmonster" in ap.name_candidates("Boss Monster with Big Club")
+    assert "bigmonster" in ap.name_candidates("The Big Monster")
+    assert "littlemonster" in ap.name_candidates("Little Monsters")
 
 
 def test_disposition_index():

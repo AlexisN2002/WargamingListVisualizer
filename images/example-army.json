@@ -1,13 +1,13 @@
 {
   "images": {
-    "Norn Emissary": "norn.webp",
-    "Termagants": ["termagant-a.png", "termagant-b.png"]
+    "Big Monster": "big.png",
+    "Little Monsters": ["little-1.png", "little-2.png"]
   },
   "scale": {
-    "Neurolictor": 1.1
+    "Flying Monster": 1.1
   },
   "leaders": {
-    "Tyranid Prime": "Hormagaunts"
+    "Boss Monster": "Little Monsters"
   },
   "settings": {
     "max_model_height": 1400,
