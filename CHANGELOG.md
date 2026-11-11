@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.1 (2026-11-11)
+
+- Fix (compact/tournament format): lines like `1 with Banner` under `4x Tin Soldier` now
+  only change that many models; before, the rest of the group was lost.
+- Vehicles without a base: `"hull 115x70"` (hull length x width in mm) or `"none"` in
+  `bases.json`. They are drawn as rounded rectangles.
+- Image names with one extra word in the unit name: `Winged Boss Monster of Doom` finds
+  `boss-monster-wings.png`, as long as the file name has no words of its own.
+
 ## 3.0.0 (2026-11-11)
 
 ### New: deployment board (`--board`, `board.bat`)

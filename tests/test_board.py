@@ -17,6 +17,8 @@ def test_parse_base():
     assert board.parse_base("70x105mm") == (105, 70)
     assert board.parse_base("28.5mm") == (28.5, 28.5)
     assert board.parse_base("big") is None
+    assert board.parse_base("none") == board.HULL
+    assert board.parse_base("hull 115x70") == (-115, -70)
 
 
 def test_bases_lookup(tmp_path):

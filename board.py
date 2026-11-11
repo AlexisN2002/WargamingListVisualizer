@@ -234,10 +234,20 @@ def load_maps(*folders: Path) -> dict:
 # --------------------------------------------------------------------------- #
 # Base sizes
 # --------------------------------------------------------------------------- #
+HULL = (-1.0, -1.0)  # marker: no base, the footprint is the vehicle's hull (estimated from the image).
+# A hull with a known size ("hull 115x70") is stored as negative numbers: (-115, -70).
+
+
 def parse_base(value) -> tuple[float, float] | None:
-    """25 -> (25, 25); "105x70" -> (105, 70); "32mm" -> (32, 32)."""
+    """25 -> (25, 25); "105x70" -> (105, 70); "32mm" -> (32, 32); "none" -> HULL (vehicle without base)."""
     if value is None:
         return None
+    if str(value).strip().lower() in ("none", "no base", "hull", "0"):
+        return HULL
+    hm = re.match(r"^\s*(?:none|hull|no base)\s+([\d.]+)\s*[x×]\s*([\d.]+)\s*(?:mm)?\s*$", str(value), re.I)
+    if hm:  # vehicle with a given hull size: "hull 115x70" (stored as negative numbers)
+        w, h = float(hm.group(1)), float(hm.group(2))
+        return -max(w, h), -min(w, h)
     if isinstance(value, (int, float)):
         return float(value), float(value)
     m = re.match(r"^\s*([\d.]+)\s*(?:mm)?\s*(?:[x×]\s*([\d.]+)\s*(?:mm)?)?\s*$", str(value), re.I)
@@ -405,6 +415,7 @@ class Model:
     base: tuple[float, float]          # mm (long, short)
     unit: ap.Unit
     estimated: bool = False
+    hull: bool = False                 # vehicle without base: rectangular footprint
 
 
 @dataclass
@@ -611,15 +622,22 @@ def draw_token(canvas: Image.Image, t: Token, ppi: float, lib: ap.ImageLibrary, 
         else:  # no image: a plain base in the army colour
             d.ellipse([cx - rw, cy - rh, cx + rw, cy + rh], fill=(55, 50, 45, 255), outline=col + (255,), width=ring)
         return
-    # tokens: white disc, coloured ring, the model fitted inside
-    d.ellipse([cx - rw, cy - rh, cx + rw, cy + rh], fill=(250, 248, 244, 255), outline=col + (255,), width=ring)
+    # tokens: white disc (vehicles: rounded rectangle), coloured ring, the model fitted inside
+    if t.model.hull:
+        d.rounded_rectangle([cx - rw, cy - rh, cx + rw, cy + rh], radius=rh * 0.35, fill=(250, 248, 244, 255),
+                            outline=col + (255,), width=ring)
+    else:
+        d.ellipse([cx - rw, cy - rh, cx + rw, cy + rh], fill=(250, 248, 244, 255), outline=col + (255,), width=ring)
     inner_w, inner_h = int(2 * (rw - ring) * 0.92), int(2 * (rh - ring) * 0.92)
     if t.model.path is not None and inner_w > 2 and inner_h > 2:
         src = lib.load(t.model.path)
         f = min(inner_w / src.width, inner_h / src.height) * 1.12
         im = src.resize((max(1, int(src.width * f)), max(1, int(src.height * f))), Image.LANCZOS)
         mask = Image.new("L", (int(2 * rw), int(2 * rh)), 0)
-        ImageDraw.Draw(mask).ellipse([ring, ring, 2 * rw - ring, 2 * rh - ring], fill=255)
+        if t.model.hull:
+            ImageDraw.Draw(mask).rounded_rectangle([ring, ring, 2 * rw - ring, 2 * rh - ring], radius=rh * 0.3, fill=255)
+        else:
+            ImageDraw.Draw(mask).ellipse([ring, ring, 2 * rw - ring, 2 * rh - ring], fill=255)
         layer = Image.new("RGBA", mask.size, (0, 0, 0, 0))
         layer.alpha_composite(im, (int(rw - im.width / 2), int(rh - im.height / 2)))
         a = layer.getchannel("A")
@@ -656,7 +674,12 @@ def unit_models(s: ArmySetup, unit: ap.Unit) -> list[Model]:
     out = []
     for p, n in zip(paths, names):
         b = s.bases.get(n, unit.name)
-        out.append(Model(p, b or (0, 0), unit, estimated=b is None))
+        if b == HULL:
+            out.append(Model(p, (0, 0), unit, estimated=True, hull=True))
+        elif b is not None and b[0] < 0:
+            out.append(Model(p, (-b[0], -b[1]), unit, hull=True))
+        else:
+            out.append(Model(p, b or (0, 0), unit, estimated=b is None))
     return out
 
 
@@ -683,6 +706,12 @@ def estimate_bases(setups: list[ArmySetup]) -> list[str]:
     for s in setups:
         for g in s.groups:
             for m in g:
+                if m.hull and not m.estimated:
+                    continue
+                if m.hull:  # vehicle: as long as its photo, about 60 % as wide
+                    length = s.lib.load(m.path).width * ratio if (m.path is not None and ratio) else 115
+                    m.base = (length, length * 0.6)
+                    continue
                 if m.estimated:
                     if m.path is not None and ratio:
                         m.base = snap_base(s.lib.load(m.path).width * ratio * 0.8)

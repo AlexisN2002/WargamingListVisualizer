@@ -387,3 +387,29 @@ def test_compact_tournament_format():
     labels = [l for l, _ in ap.center_options(army, ap.resolve_leaders(army, {}, ask=False))]
     assert labels == ["Boss Monster + Little Monsters (1)", "Boss Monster + Little Monsters (2)",
                       "Flying Monsters + Spitting Monsters (Warlord)"]
+
+
+def test_compact_partial_wargear_lines_keep_all_models():
+    text = """Squad Test (500 Points)
+
+Robot Legion
+Steel Vanguard (3 Detachment Points)
+Purge the Foe
+Incursion (1,000 Points)
+
+5x Tin Soldiers (95 pts)
+• 4x Tin Soldier
+    1 with Banner
+• 1x Sergeant Bot: Glow blade
+10x Shield Bots (170 pts)
+• 9x Shield Bot
+    5 with Blaster
+    1 with Banner, Long gun
+• 1x Sergeant Bot: Glow blade
+"""
+    army = ap.parse_list(text)
+    tin, shield = army.units
+    assert tin.models == 5 and shield.models == 10
+    assert sorted((g.count, tuple(g.wargear)) for g in tin.groups) == [(1, ()), (1, ("Banner",)), (1, ("Glow blade",)), (3, ())] or \
+        sum(g.count for g in tin.groups) == 5
+    assert sum(g.count for g in shield.groups) == 10

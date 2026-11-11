@@ -27,7 +27,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter
 
-__version__ = "3.0.0"
+__version__ = "3.0.1"
 
 IMAGE_EXTENSIONS = {".png", ".webp", ".jpg", ".jpeg"}
 OUTPUT_PREFIXES = ("army_photo", "group_photo")
@@ -298,10 +298,12 @@ def parse_compact(text: str) -> ArmyList:
             continue
         w = COMPACT_WITH_RE.match(s)  # "3 with Claws"
         if w and group is not None:
-            sub = ModelGroup(int(w.group("n")), group.name, group.wargear + _split_items(w.group("rest")))
-            if not split_group:  # replace the parent group by its parts
+            # "• 4x Tin Soldier" + "1 with Banner": 1 model gets the banner, the other 3 stay as they are
+            n = min(int(w.group("n")), group.count)
+            sub = ModelGroup(n, group.name, group.wargear + _split_items(w.group("rest")))
+            group.count -= n
+            if group.count <= 0 and group in unit.groups:
                 unit.groups.remove(group)
-                split_group = True
             unit.groups.append(sub)
             continue
 
@@ -607,6 +609,25 @@ class ImageLibrary:
                 scored = [(10 * h - pre - post_w * post, p) for h, pre, post, p in cands]
                 best = max(s for s, _ in scored)
                 return sorted(p for s, p in scored if s == best)
+        # names with an extra word: "Rusty Hover Tank" -> hover-tank.png, "Winged Boss Monster of Doom"
+        # -> boss-monster-wings.png. All but one word of the name must be in the file name, and the
+        # file name must not have words of its own (apart from wargear / variant words), so
+        # "Medium Monster" does not pick big-monster.png.
+        if len(nw) >= 2:
+            best, best_n = [], 0
+            for f in self.files:
+                hit = [w for w in nw if w in f.tokens]
+                own = [t for i, t in enumerate(f.tokens) if t not in nw
+                       and not (f.variant_at is not None and i >= f.variant_at)
+                       and not _hint_match(t, hint_words, hint_slugs)]
+                if len(hit) >= len(nw) - 1 and hit and not own:
+                    score = 10 * sum(_hint_match(t, hint_words, hint_slugs) for t in f.tokens) + len(hit)
+                    if score > best_n:
+                        best, best_n = [f.path], score
+                    elif score == best_n:
+                        best.append(f.path)
+            if best:
+                return sorted(best)
         # last resort: typos ("Termagnts")
         keys = {slug("".join(f.tokens)): f.path for f in self.files}
         hit = difflib.get_close_matches(slug("".join(nw)), keys.keys(), n=1, cutoff=0.82)

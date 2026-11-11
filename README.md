@@ -146,7 +146,9 @@ You can also drop one or two list files and optionally a terrain layout image on
   `hammer-and-anvil`, `dawn-of-war`, `crucible-of-battle`, with their objective markers. You can
   add or correct maps with a `maps.json` in the image folder (same format as `MAPS` in `board.py`).
 - **Real base sizes:** every model gets the base from `bases.json` in its army's image folder,
-  round (`32`) or oval (`"105x70"`), in mm. Model names (`"Smart Monster": 50`) and unit names
+  round (`32`) or oval (`"105x70"`), in mm. Vehicles without a base: `"hull 115x70"` (hull length x
+  width), or `"none"` to estimate it from the image; they are drawn as rounded rectangles.
+  Model names (`"Smart Monster": 50`) and unit names
   work. Missing ones are estimated from the image and listed in the console.
 - **Two looks** (`--board-style`): `tokens` (default) shows the model inside its base, like a
   token; `models` shows just the model photos in true scale to each other, standing where their
