@@ -17,6 +17,7 @@
   layout image works.
 - Smart deployment on terrain: infantry stands in ruins, units prefer spots hidden from the enemy
   (`smart_deploy`).
+- Second demo army (robots, `examples/robot_list.txt`) so the board demo shows two armies.
 - `images/example-bases.json`: template for your own base sizes.
 - Missing base sizes are estimated from the images and listed in the console.
 

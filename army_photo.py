@@ -139,7 +139,7 @@ def _is_section(line: str) -> bool:
 
 
 def _faction_line(line: str) -> tuple[str, str, str, str] | None:
-    """'Xenos - Tyranids - CrusherTalons - [1990 pts]' -> (faction, rest, title, points)."""
+    """'Monsters - Monster Army - Monster Party - [1000 pts]' -> (faction, rest, title, points)."""
     m = re.match(r"^(?P<parts>.+?)(?:\s+-\s+\[(?P<pts>[\d,.]+)\s*pts\])?\s*$", line.strip())
     parts = [p.strip() for p in m.group("parts").split(" - ")] if m else []
     if len(parts) < 2:
@@ -152,7 +152,7 @@ def _faction_line(line: str) -> tuple[str, str, str, str] | None:
 
 
 # --------------------------------------------------------------------------- #
-# Format 1: GW style ("Tyranid Prime (75 Points)" + bullet lists)
+# Format 1: GW style ("Boss Monster (75 Points)" + bullet lists)
 # --------------------------------------------------------------------------- #
 GW_UNIT_RE = re.compile(r"^(?P<name>[^•◦].*?)\s*\((?P<points>[\d,.]+)\s*(?:Points|Punkte)\)\s*$", re.I)
 BULLET_RE = re.compile(r"^\s*[•\-*]\s*(?:(\d+)x\s+)?(.+?)\s*$")
@@ -238,7 +238,7 @@ def parse_gw(text: str) -> ArmyList:
 
 
 # --------------------------------------------------------------------------- #
-# Format 2: compact ("Char1: 1x The Swarmlord (210 pts): Warlord, Bone Sabres")
+# Format 2: compact ("Char1: 1x The Big Monster (210 pts): Warlord, Crushing claws")
 # --------------------------------------------------------------------------- #
 COMPACT_UNIT_RE = re.compile(
     r"^(?:(?P<char>Char\d+)\s*:\s*)?(?P<n>\d+)x\s+(?P<name>.+?)\s*\((?P<points>[\d,.]+)\s*pts\)\s*(?::\s*(?P<rest>.*))?$",
@@ -286,7 +286,7 @@ def parse_compact(text: str) -> ArmyList:
             kind = "leads" if lk.group("kind").lower().startswith("leading") else "led_by"
             pending.append((kind, unit.id, lk.group("name")))
             continue
-        g = COMPACT_GROUP_RE.match(s)  # "• 4x Ravener" / "• 1x Ravener Prime: Warlord, Prime claws"
+        g = COMPACT_GROUP_RE.match(s)  # "• 4x Flying Monster" / "• 1x Flying Monster Prime: Warlord, Big claws"
         if g:
             items = _split_items(g.group("rest") or "")
             if any(i.lower() == "warlord" for i in items):
@@ -296,7 +296,7 @@ def parse_compact(text: str) -> ArmyList:
             unit.groups.append(group)
             split_group = False
             continue
-        w = COMPACT_WITH_RE.match(s)  # "3 with Ravener heavy claws and talons"
+        w = COMPACT_WITH_RE.match(s)  # "3 with Claws"
         if w and group is not None:
             sub = ModelGroup(int(w.group("n")), group.name, group.wargear + _split_items(w.group("rest")))
             if not split_group:  # replace the parent group by its parts
@@ -318,7 +318,7 @@ def parse_compact(text: str) -> ArmyList:
 
 
 # --------------------------------------------------------------------------- #
-# Format 3: simple ("Norn Emissary (270pts): Destabilising Predation (Upgrade)")
+# Format 3: simple ("Big Monster (270pts): Big Brain (Upgrade)")
 # --------------------------------------------------------------------------- #
 SIMPLE_UNIT_RE = re.compile(r"^(?P<name>[^•◦#].*?)\s*\((?P<points>[\d,.]+)\s*pts\)\s*(?::\s*(?P<rest>.*))?$", re.I)
 
@@ -333,7 +333,7 @@ def parse_simple(text: str) -> ArmyList:
         s = raw.strip()
         if not s or s.lower().startswith(("created with", "exported with")):
             continue
-        a = SIMPLE_ATTACHED_RE.match(s)  # "+ 6x Zoanthropes (190pts)" = unit led by the line above
+        a = SIMPLE_ATTACHED_RE.match(s)  # "+ 6x Little Monsters (190pts)" = unit led by the line above
         m = SIMPLE_UNIT_RE.match(a.group("unit") if a else s)
         if m:
             unit = Unit(id=len(army.units), name=m.group("name").strip(), points=_to_int(m.group("points")))
@@ -397,7 +397,7 @@ def parse_bracket(text: str) -> ArmyList:
         if not s or s.lower().startswith(("created with", "exported with")):
             continue
         lk = LINK_RE.match(raw)
-        if lk and unit is not None:  # "• Leading: Zoanthropes" / "• Leader: Neurotyrant"
+        if lk and unit is not None:  # "• Leading: Little Monsters" / "• Leader: Smart Monster"
             kind = "leads" if lk.group("kind").lower() in ("leading", "leads", "attached to") else "led_by"
             pending.append((kind, unit.id, lk.group("name")))
             continue
@@ -493,7 +493,7 @@ def words(text: str) -> list[str]:
 
 
 def name_words(name: str) -> list[str]:
-    """'Tyranid Prime with Lash Whip' -> ['tyranid', 'prime']"""
+    """'Boss Monster with Big Club' -> ['boss', 'monster']"""
     base = re.split(r"\s+with\s+", name, flags=re.I)[0]
     return [w for w in words(base) if w not in STOP_WORDS]
 
@@ -601,7 +601,7 @@ class ImageLibrary:
                         pre += 1
                 cands.append((hits, pre, post, f.path))
             if cands:
-                # Words behind a variant marker ("hormagaunt-c-leaping") only matter when some
+                # Words behind a variant marker ("little-monster-c-jumping") only matter when some
                 # image matches the wargear; otherwise all variants are mixed for variety.
                 post_w = 0.5 if any(c[0] for c in cands) else 0
                 scored = [(10 * h - pre - post_w * post, p) for h, pre, post, p in cands]

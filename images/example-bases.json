@@ -1,7 +1,7 @@
 {
-  "_how_to": "Copy this file into your army folder (e.g. images/tyranids/) and rename it to bases.json.",
-  "_names": "Use the unit or model name exactly as in your New Recruit list. Upper/lower case, 'The' and plural -s don't matter: 'Termagants', 'Termagant' and 'termagant' are the same.",
-  "_units_vs_models": "Model names win over unit names. A unit with different models (e.g. '4x Ravener' and '1x Ravener Prime') can get one entry per model name.",
+  "_how_to": "Copy this file into your army folder (e.g. images/monster-army/) and rename it to bases.json.",
+  "_names": "Use the unit or model name exactly as in your New Recruit list. Upper/lower case, 'The' and plural -s don't matter: 'Little Monsters', 'Little Monster' and 'little monster' are the same.",
+  "_units_vs_models": "Model names win over unit names. A unit with different models (e.g. '4x Flying Monster' and '1x Flying Monster Prime') can get one entry per model name.",
   "_sizes": "Size in mm. Round bases: a number, e.g. 32. Oval bases: \"long x short\" in quotes, e.g. \"105x70\".",
   "_missing": "Units without an entry get a size estimated from their image; the console lists them.",
   "_lines_starting_with_underscore": "are comments and are ignored. Replace the examples below with your own units.",

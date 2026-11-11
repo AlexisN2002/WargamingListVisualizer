@@ -818,7 +818,7 @@ def run(texts: list[str], args) -> int:
     guessed = estimate_bases(setups)
     if guessed:
         print("No base size in bases.json for:", ", ".join(guessed))
-        print("      (estimated from the image; add them to bases.json, e.g. \"Termagants\": 25)")
+        print("      (estimated from the image; add them to bases.json, e.g. \"Little Monsters\": 25)")
 
     photo, missing = render_board(setups, map_name, maps, style=args.board_style, ppi=args.ppi,
                                   terrain_image=terrain, seed=args.seed or 0)

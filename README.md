@@ -7,7 +7,8 @@ every model in the list, lined up together like a team photo.
 |:-----------:|:------------:|:----------------:|
 | ![Group photo](docs/demo.png) | ![Battle-ready](docs/demo-battle-ready.png) | ![Deployment board](docs/demo-board.png) |
 
-*Demo made with the procedurally drawn critters in `examples/demo_images`.*
+*Demo made with two procedurally drawn armies: the critters in `examples/demo_images` and the robots
+in `examples/robot_images`.*
 
 > **Good to know**
 > - **List formats:** reads all text exports of New Recruit and detects the format automatically (see [Supported list formats](#supported-list-formats)). The **GW format** gives the best result.
@@ -56,6 +57,8 @@ opens automatically.
 To try it without your own images:
 ```
 python army_photo.py examples/demo_list.txt -i examples/demo_images
+python army_photo.py examples/demo_list.txt examples/robot_list.txt --board --map crucible-of-battle \
+    -i examples/demo_images --enemy-images examples/robot_images
 ```
 
 ## Supported list formats
@@ -143,7 +146,7 @@ You can also drop one or two list files and optionally a terrain layout image on
   `hammer-and-anvil`, `dawn-of-war`, `crucible-of-battle`, with their objective markers. You can
   add or correct maps with a `maps.json` in the image folder (same format as `MAPS` in `board.py`).
 - **Real base sizes:** every model gets the base from `bases.json` in its army's image folder,
-  round (`32`) or oval (`"105x70"`), in mm. Model names (`"Neurothrope": 40`) and unit names
+  round (`32`) or oval (`"105x70"`), in mm. Model names (`"Smart Monster": 50`) and unit names
   work. Missing ones are estimated from the image and listed in the console.
 - **Two looks** (`--board-style`): `tokens` (default) shows the model inside its base, like a
   token; `models` shows just the model photos in true scale to each other, standing where their
@@ -318,6 +321,7 @@ You can also install it as a command with `pip install .` and then run `army-pho
 pip install -r requirements.txt pytest
 pytest
 python examples/make_demo_images.py   # regenerate the demo critters
+python examples/make_robot_images.py  # regenerate the demo robots
 ```
 
 Contributions are welcome, especially support for more list formats and smarter layouts.

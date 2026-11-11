@@ -25,7 +25,7 @@ def test_bases_lookup(tmp_path):
     b = board.Bases(f)
     assert b.get("Little Monsters") == (25, 25)          # plural / singular
     assert b.get("The Big Monster") == (120, 92)
-    assert b.get("Ravener Prime", "Little Monsters") == (25, 25)   # first name unknown -> second
+    assert b.get("Flying Monster Prime", "Little Monsters") == (25, 25)   # first name unknown -> second
     assert b.get("Medium Monster") is None
 
 
@@ -131,3 +131,11 @@ def test_transparent_layout_image():
     assert abs(rect[0] - 100) <= 6 and abs(rect[2] - (100 + b.width)) <= 6
     assert abs(rect[1] - 100) <= 6 and abs(rect[3] - (100 + b.height)) <= 6
     assert board.detect_map(board.flatten(img), rect, board.MAPS) == "dawn-of-war"
+
+
+def test_two_demo_armies_on_the_board(tmp_path):
+    out = tmp_path / "vs.png"
+    rc = ap.main([str(DEMO), str(ROOT / "examples" / "robot_list.txt"), "--board", "--map", "crucible-of-battle",
+                  "-i", str(IMAGES), "--enemy-images", str(ROOT / "examples" / "robot_images"), "-o", str(out),
+                  "--no-open", "--no-questions", "--no-terrain", "--ppi", "12"])
+    assert rc == 0 and out.exists()

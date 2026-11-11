@@ -1,0 +1,40 @@
+Tin Patrol (1,000 Points)
+
+Robot Legion
+Steel Vanguard (3 Detachment Points)
+Purge the Foe
+Incursion (1,000 Points)
+
+ATTACHED UNITS
+
+Attached unit 1
+
+Robot Captain (90 Points)
+  • Attached as: Leader (Character)
+  • Warlord
+  • 1x Glow blade
+
+Tin Soldiers (100 Points)
+  • Attached as: Bodyguard (Battleline)
+  • 10x Tin Soldiers
+     ◦ 10x Blaster
+
+BATTLELINE
+
+Tin Soldiers (100 Points)
+  • 10x Tin Soldiers
+     ◦ 10x Blaster
+
+OTHER DATASHEETS
+
+Shield Bots (120 Points)
+  • 5x Shield Bot
+     ◦ 5x Glow blade
+
+Walker (200 Points)
+  • 1x Twin cannons
+
+Hover Tank (220 Points)
+  • 1x Long gun
+
+Exported with New Recruit v37.21, Data Version: v3
