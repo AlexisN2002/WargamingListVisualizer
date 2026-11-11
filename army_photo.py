@@ -27,7 +27,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter
 
-__version__ = "2.0.0"
+__version__ = "3.0.0"
 
 IMAGE_EXTENSIONS = {".png", ".webp", ".jpg", ".jpeg"}
 OUTPUT_PREFIXES = ("army_photo", "group_photo")
@@ -47,6 +47,7 @@ DEFAULTS = {
     "tilt": 0.65,               # battle-ready: how much higher units stand further back
     "curve": 0.15,              # battle-ready: how strongly the rows bend backwards at the sides
     "max_hidden": 0.01,         # battle-ready: a unit is moved back until at most this much of it is hidden
+    "smart_deploy": 1.0,        # board: how much units like to stand in / behind terrain (0 = off)
 }
 
 DISPOSITIONS = ["take and hold", "disruption", "purge the foe", "priority assets", "reconnaissance"]
@@ -1303,7 +1304,8 @@ FORMAT_NAMES = {"gw": "GW", "compact": "compact (WTC)", "simple": "simple", "bra
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="army-photo",
                                  description="Turn a New Recruit army list into a group photo of your models.")
-    ap.add_argument("list", nargs="?", help="text file with the list (default: clipboard)")
+    ap.add_argument("list", nargs="*", help="text file with the list (default: clipboard); "
+                                            "with --board a second file is the opponent")
     ap.add_argument("-o", "--output", help="output file (default: army_photo_<list name>.png)")
     ap.add_argument("-i", "--images", help="folder with model images (default: images/<faction>)")
     ap.add_argument("-l", "--leader", action="append", default=[], metavar="CHARACTER=UNIT",
@@ -1327,6 +1329,18 @@ def main(argv=None) -> int:
     ap.add_argument("--extract-dispositions", metavar="CARD",
                     help="cut the 5 icons out of a disposition card into <images>/dispositions/ and exit")
     ap.add_argument("--no-open", action="store_true", help="do not open the result afterwards")
+    ap.add_argument("--board", action="store_true",
+                    help="deployment board: models as tokens with their real base size in the deployment zones")
+    ap.add_argument("--map", help='board: deployment map, e.g. "crucible-of-battle"; "ask" shows a menu; '
+                                  '"auto" detects it from --terrain')
+    ap.add_argument("--board-style", choices=["tokens", "models", "ask"], default="tokens",
+                    help="board: round tokens with the model inside (default) or models standing on their bases")
+    ap.add_argument("--terrain", metavar="LAYOUT", help='board: terrain layout: "ask" (menu), "random", '
+                    '"none" (default), a number like "43" from images/layouts, or any image file')
+    ap.add_argument("--no-terrain", action="store_true", help="board: plain battlefield without terrain layout")
+    ap.add_argument("--bases", metavar="JSON", help="board: extra base size file (besides <images>/bases.json)")
+    ap.add_argument("--enemy-images", metavar="DIR", help="board: image folder of the second army")
+    ap.add_argument("--ppi", type=float, default=30, help="board: pixels per inch (default 30)")
     ap.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     args = ap.parse_args(argv)
 
@@ -1343,8 +1357,38 @@ def main(argv=None) -> int:
         print(f"Saved {len(icons)} icons to {out}")
         return 0
 
+    if args.board:
+        import board
+        # image files given as arguments (e.g. dropped onto board.bat) are the terrain layout
+        images = [f for f in args.list if Path(f).suffix.lower() in IMAGE_EXTENSIONS]
+        if images and not args.terrain:
+            args.terrain = images[0]
+        lists = [f for f in args.list if f not in images]
+        texts = [Path(f).read_text(encoding="utf-8") for f in lists[:2]]
+        if not texts:
+            clip = read_clipboard()
+            if looks_like_list(clip):
+                print("Read army list from clipboard.")
+                texts = [clip]
+            else:
+                print("No army list in the clipboard. Paste it here, then press "
+                      "Ctrl+Z and Enter (Windows) or Ctrl+D (macOS/Linux):")
+                texts = [sys.stdin.read()]
+            # second army: copy the opponent's list, then press Enter
+            if sys.stdin.isatty() and clip and looks_like_list(clip):
+                try:
+                    input("\nOpponent: copy the second list in New Recruit and press Enter "
+                          "(or just press Enter to deploy only your army): ")
+                except EOFError:
+                    pass
+                clip2 = read_clipboard()
+                if clip2 and clip2.strip() != clip.strip() and looks_like_list(clip2):
+                    print("Read the opponent's list from clipboard.")
+                    texts.append(clip2)
+        return board.run(texts, args)
+
     if args.list:
-        text = Path(args.list).read_text(encoding="utf-8")
+        text = Path(args.list[0]).read_text(encoding="utf-8")
     else:
         text = read_clipboard()
         if not looks_like_list(text):

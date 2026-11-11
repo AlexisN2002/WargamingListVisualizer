@@ -1,5 +1,25 @@
 # Changelog
 
+## 3.0.0 (2026-11-11)
+
+### New: deployment board (`--board`, `board.bat`)
+- Every model as a token with its real base size (round or oval, from `bases.json`), standing in
+  the deployment zone on a 44" x 60" battlefield.
+- One or two lists: the first army deploys in the attacker zone, the second in the defender zone.
+- The six 11th edition deployment maps with objective markers; more maps via `maps.json`.
+- Two looks: tokens with the model inside, or just the model photos (one shared scale) standing on
+  the battlefield.
+- Two lists from the clipboard: `board.bat` reads your list, then asks you to copy the opponent's.
+- Automatic deployment: units stay together with their leaders, keep 1" apart, big models in the
+  back, small ones in front.
+- Terrain layouts from `images/layouts/`: pick the deployment map, then one of the layouts that use
+  it (`--terrain ask`), or a random one; the map of each image is recognised automatically. Any
+  layout image works.
+- Smart deployment on terrain: infantry stands in ruins, units prefer spots hidden from the enemy
+  (`smart_deploy`).
+- `images/example-bases.json`: template for your own base sizes.
+- Missing base sizes are estimated from the images and listed in the console.
+
 ## 2.0.0 (2026-11-10)
 
 ### New: battle-ready layout

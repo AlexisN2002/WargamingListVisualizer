@@ -2,9 +2,11 @@
 images/*
 !images/README.md
 !images/example-army.json
+!images/example-bases.json
 
 # Generated pictures
 army_photo_*.png
+army_board_*.png
 group_photo_*.png
 
 __pycache__/

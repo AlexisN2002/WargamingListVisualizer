@@ -3,9 +3,9 @@
 **army-photo** turns a [New Recruit](https://www.newrecruit.eu/) army list into a **group photo of your army**:
 every model in the list, lined up together like a team photo.
 
-| Group photo | Battle-ready |
-|:-----------:|:------------:|
-| ![Group photo](docs/demo.png) | ![Battle-ready](docs/demo-battle-ready.png) |
+| Group photo | Battle-ready | Deployment board |
+|:-----------:|:------------:|:----------------:|
+| ![Group photo](docs/demo.png) | ![Battle-ready](docs/demo-battle-ready.png) | ![Deployment board](docs/demo-board.png) |
 
 *Demo made with the procedurally drawn critters in `examples/demo_images`.*
 
@@ -15,8 +15,10 @@ every model in the list, lined up together like a team photo.
 
 ## Features
 
-- **Two looks:** a packed **group photo**, or **battle-ready** with the models spread out like
-  box art and one character with its unit in the middle (see [Layouts](#layouts)).
+- **Three looks:** a packed **group photo**, **battle-ready** with the models spread out like
+  box art and one character with its unit in the middle (see [Layouts](#layouts)), or a
+  **deployment board** with every model on its real base size in the deployment zone, one or two
+  armies facing each other (see [Deployment board](#deployment-board)).
 - **Every model is in the picture.** A unit of 20 shows 20 models in staggered ranks.
   Back ranks are slightly smaller and darker to give some depth.
 - **Leaders stand with their unit.** Attached units from the New Recruit export are
@@ -122,6 +124,56 @@ further back (and a bit towards the middle, so the army forms a circle) until at
 To make one of them your default, set `"layout": "battle-ready"` in the `settings` of `army.json`.
 Battle-ready pictures are saved as `army_photo_<list name>_battle_ready.png`, so they don't
 overwrite the group photo.
+
+## Deployment board
+
+```
+python army_photo.py my_list.txt --board
+python army_photo.py my_list.txt opponent.txt --board --map crucible-of-battle
+python army_photo.py my_list.txt opponent.txt --board --map ask --terrain ask --board-style models
+```
+
+Or on Windows: copy your list in New Recruit and double-click `board.bat`. It then asks you to
+copy the opponent's list (or press Enter to deploy only your army), the map and the look.
+You can also drop one or two list files and optionally a terrain layout image onto `board.bat`.
+
+- **Battlefield:** 44" x 60", seen from above like the mission cards. The first list deploys in the
+  red (attacker) zone, the second one in the blue (defender) zone.
+- **Deployment maps (11th edition):** `tipping-point`, `sweeping-engagement`, `search-and-destroy`,
+  `hammer-and-anvil`, `dawn-of-war`, `crucible-of-battle`, with their objective markers. You can
+  add or correct maps with a `maps.json` in the image folder (same format as `MAPS` in `board.py`).
+- **Real base sizes:** every model gets the base from `bases.json` in its army's image folder,
+  round (`32`) or oval (`"105x70"`), in mm. Model names (`"Neurothrope": 40`) and unit names
+  work. Missing ones are estimated from the image and listed in the console.
+- **Two looks** (`--board-style`): `tokens` (default) shows the model inside its base, like a
+  token; `models` shows just the model photos in true scale to each other, standing where their
+  bases are.
+- **Automatic deployment:** every unit stands together with its leaders, units keep 1" apart,
+  big models go to the back of the zone, small ones to the front, spread across the zone.
+- **Smart deployment on terrain:** with a terrain layout, units look for cover: infantry likes to
+  stand in the ruins, and every unit prefers a spot where terrain blocks the view towards the
+  enemy. Big models (60 mm bases and up) stay out of the ruins. `"smart_deploy"` in the settings
+  of `army.json` sets how strong this is (`0` turns it off).
+- **Terrain layouts:** put layout images into `images/layouts/` (for example the official 11th
+  edition layouts from the Warhammer Event Companion; they belong to Games Workshop and are not part
+  of this repository, `images/` is git-ignored). `board.bat` asks for the deployment map; only maps with a
+  layout are offered. If there are several layouts for that map, it lets you pick one. The map of every image is recognised
+  automatically and cached in `images/layouts/index.json`. On the command line: `--terrain ask`,
+  `--terrain random`, `--terrain 43` (number of the file) or `--terrain my_layout.png`.
+
+Start from `images/example-bases.json`: copy it into your army folder, rename it to `bases.json`
+and replace the examples. Use the unit or model names from your list (case, "The" and plural -s
+don't matter); round bases are a number in mm, oval ones `"long x short"`.
+
+`bases.json` example:
+
+```json
+{
+  "Little Monster": 25,
+  "Boss Monster": 40,
+  "Spiky Monster": "105x70"
+}
+```
 
 ## Images
 
@@ -229,7 +281,7 @@ python army_photo.py --extract-dispositions path/to/card.jpg -i images/monster-a
 ## Command line
 
 ```
-python army_photo.py [LIST] [options]
+python army_photo.py [LIST] [LIST2] [options]
 
   -o, --output FILE         output file (default: army_photo_<list name>.png)
   -i, --images DIR          image folder (default: images/<faction>)
@@ -246,6 +298,14 @@ python army_photo.py [LIST] [options]
       --center UNIT         battle-ready: who stands in the middle; "ask" shows a menu
                             (default: random character)
       --seed N              battle-ready: repeat the same random pick
+      --board               deployment board (one or two lists)
+      --map NAME            board: deployment map, "ask" for a menu, "auto" with --terrain
+      --board-style STYLE   board: tokens (default) or models
+      --terrain LAYOUT      board: ask, random, none, a number from images/layouts or an image
+      --no-terrain          board: plain battlefield without terrain
+      --bases FILE          board: extra bases.json
+      --enemy-images DIR    board: image folder of the second army
+      --ppi N               board: pixels per inch (default 30)
       --extract-dispositions CARD   cut a disposition card into single icons
       --no-open             don't open the picture afterwards
 ```

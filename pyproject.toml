@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "army-photo"
-version = "2.0.0"
+version = "3.0.0"
 description = "Turn a New Recruit army list into a group photo of your miniatures."
 readme = "README.md"
 license = { text = "MIT" }
@@ -16,7 +16,7 @@ keywords = ["wargaming", "miniatures", "new recruit", "army list", "tabletop"]
 army-photo = "army_photo:main"
 
 [tool.setuptools]
-py-modules = ["army_photo"]
+py-modules = ["army_photo", "board"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
